@@ -6,7 +6,7 @@ A minimal Telegram-channel-like app with:
 - REST API routes (`/api/messages`)
 - Two pages:
   - `/` (public channel viewer)
-  - `/admin` (management: post messages)
+  - `/charrrdmin` (management: post messages)
 
 ## Quickstart
 
@@ -25,7 +25,7 @@ npm run dev
 
 Open:
 - http://localhost:3000 — public channel
-- http://localhost:3000/admin — admin composer
+- http://localhost:3000/charrrdmin — admin composer
 
 ## Environment
 Copy `.env.example` to `.env`:

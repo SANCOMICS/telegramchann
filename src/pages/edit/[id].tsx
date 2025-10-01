@@ -111,14 +111,14 @@ export default function EditMessage() {
       }),
     });
 
-    router.push("/admin");
+    router.push("/charrrdmin");
   };
 
   // ✅ Delete message
   const del = async () => {
     if (!confirm("Are you sure you want to delete this message?")) return;
     await fetch(`/api/messages?id=${id}`, { method: "DELETE" });
-    router.push("/admin");
+    router.push("/charrrdmin");
   };
 
   return (
