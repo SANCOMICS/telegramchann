@@ -1,12 +1,13 @@
 datasource db {
   provider  = "postgresql"
-  url       = env("POSTGRES_PRISMA_URL")   // Vercel Neon integration sets this
-  directUrl = env("POSTGRES_URL_NON_POOLING")
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL") // fallback for migrations or long queries
 }
 
 generator client {
   provider = "prisma-client-js"
 }
+
 
 model Message {
   id             Int      @id @default(autoincrement())
