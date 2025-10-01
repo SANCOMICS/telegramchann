@@ -6,7 +6,6 @@ const REACTIONS: Record<string, keyof MsgReactions> = {
   "🤯": "reactMindBlown",
   "🔥": "reactFire",
   "💯": "reactHundred",
-  "💪": "reactFlex",
   "💨": "reactDash",
   "❤️": "reactHeart",
 };
@@ -15,7 +14,6 @@ type MsgReactions = {
   reactMindBlown: number;
   reactFire: number;
   reactHundred: number;
-  reactFlex: number;
   reactDash: number;
   reactHeart: number;
 };
@@ -35,7 +33,6 @@ export default function EditMessage() {
     reactMindBlown: 0,
     reactFire: 0,
     reactHundred: 0,
-    reactFlex: 0,
     reactDash: 0,
     reactHeart: 0,
   });
@@ -63,7 +60,6 @@ export default function EditMessage() {
           reactMindBlown: msg.reactMindBlown ?? 0,
           reactFire: msg.reactFire ?? 0,
           reactHundred: msg.reactHundred ?? 0,
-          reactFlex: msg.reactFlex ?? 0,
           reactDash: msg.reactDash ?? 0,
           reactHeart: msg.reactHeart ?? 0,
         });

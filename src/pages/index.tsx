@@ -60,32 +60,11 @@ export default function Home() {
       <div className="flex justify-center min-h-screen bg-[#17212b]">
         <div className="flex flex-col h-screen w-full max-w-md border-x border-[#1c2733]">
           {/* Header */}
-         <header className="px-4 py-3 flex items-center justify-between border-b border-[#1c2733] bg-[#17212b]/95 backdrop-blur sticky top-0 z-10">
-            <Link href="/profile" className="flex items-center gap-3">
-              {/* ✅ Avatar image instead of "C" */}
-              <img
-                src="https://kushfly.com/wp-content/uploads/2025/03/boutiq-switch-v4.webp"
-                alt="Channel Avatar"
-                className="w-10 h-10 rounded-full object-cover"
-              />
-
-              <div className="flex flex-col leading-tight">
-                <h1 className="text-sm font-bold">{channelName}</h1>
-                <p className="text-[11px] text-neutral-400">3358 subscribers</p>
-              </div>
-            </Link>
-
-             <Link href="/profile">
-
-            <div className="flex items-center gap-4">
-              <FiSearch className="text-xl text-neutral-300 cursor-pointer" />
-              <FiMoreVertical className="text-xl text-neutral-300 cursor-pointer" />
-            </div>
-            </Link>
+          <header className="px-4 py-3 flex items-center justify-between border-b border-[#1c2733] bg-[#17212b]/95 backdrop-blur sticky top-0 z-10">
+            ...
           </header>
 
-
-          {/* Messages */}
+          {/* Messages (scrollable) */}
           <main
             ref={listRef}
             className="flex-1 overflow-y-auto p-4 space-y-6 scrollbar-thin"
@@ -109,16 +88,19 @@ export default function Home() {
               ))
             )}
           </main>
-           <ScrollButtons container={listRef as React.RefObject<HTMLDivElement>} />
 
-          {/* Bottom disabled input */}
-          <div className="px-4 py-3 border-t border-[#1c2733] bg-[#17212b]">
+          {/* Scroll buttons */}
+          <ScrollButtons container={listRef as React.RefObject<HTMLDivElement>} />
+
+          {/* ✅ Fixed bottom bar */}
+          <div className="px-4 py-3 border-t border-[#1c2733] bg-[#17212b] shrink-0">
             <div className="rounded-full bg-[#1c2733] text-neutral-400 px-4 py-2 text-sm text-center">
               You can’t send messages in this channel
             </div>
           </div>
         </div>
       </div>
+
     </>
   );
 }

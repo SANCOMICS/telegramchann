@@ -70,7 +70,6 @@ export default function ChannelMessage({ message }: { message: Msg }) {
     "🤯": message.reactMindBlown,
     "🔥": message.reactFire,
     "💯": message.reactHundred,
-    "💪": message.reactFlex,
     "💨": message.reactDash,
     "❤️": message.reactHeart,
   });
@@ -150,7 +149,7 @@ export default function ChannelMessage({ message }: { message: Msg }) {
 
   return (
     <div
-      className="flex flex-col max-w-[80%] mr-auto p-2 rounded-2xl bg-[#1b2d48] text-white"
+      className="flex flex-col max-w-[90%] mr-auto p-2 rounded-2xl bg-[#1b2d48] text-white"
       onContextMenu={(e) => {
         e.preventDefault();
         setShowReactions(true);
@@ -175,7 +174,7 @@ export default function ChannelMessage({ message }: { message: Msg }) {
 
       {/* Content */}
       {message.content && (
-        <div className="px-3 py-2 text-sm whitespace-pre-wrap break-words mb-3">
+        <div className="px-3 py-2 text-sm whitespace-pre-wrap break-words mb-4">
           {linkify(message.content)}
         </div>
       )}

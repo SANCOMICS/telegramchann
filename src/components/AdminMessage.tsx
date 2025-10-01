@@ -22,7 +22,6 @@ const REACTIONS: { emoji: string; key: keyof Msg }[] = [
   { emoji: "🤯", key: "reactMindBlown" },
   { emoji: "🔥", key: "reactFire" },
   { emoji: "💯", key: "reactHundred" },
-  { emoji: "💪", key: "reactFlex" },
   { emoji: "💨", key: "reactDash" },
   { emoji: "❤️", key: "reactHeart" },
 ];
