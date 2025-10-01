@@ -19,7 +19,7 @@ export type Msg = {
   reactHeart: number;
 };
 
-const REACTIONS = ["🤯", "🔥", "💯", "💪", "💨", "❤️"];
+const REACTIONS = ["🤯", "🔥", "💯", "💨", "❤️"];
 
 // ✅ Detect URLs and render as <a>
 function linkify(text: string) {
@@ -137,7 +137,6 @@ export default function ChannelMessage({ message }: { message: Msg }) {
         reactMindBlown: next["🤯"] ?? 0,
         reactFire: next["🔥"] ?? 0,
         reactHundred: next["💯"] ?? 0,
-        reactFlex: next["💪"] ?? 0,
         reactDash: next["💨"] ?? 0,
         reactHeart: next["❤️"] ?? 0,
       }),
@@ -184,13 +183,13 @@ export default function ChannelMessage({ message }: { message: Msg }) {
 
       {/* Reactions */}
       {Object.entries(localReactions).some(([, c]) => c > 0) && (
-        <div className="flex  gap-2 ml-2 text-lg mt-1">
+        <div className="flex  gap-2 ml-1 mr-2 text-lg mt-1">
           {Object.entries(localReactions)
             .filter(([, c]) => c > 0)
             .map(([emoji, count]) => (
               <span
                 key={emoji}
-                className={`flex bg-[#2b5278] rounded-xl p-1 items-center gap-1 ${
+                className={`flex bg-[#2b5278] rounded-xl p-[3px] items-center gap-1 ${
                   myReaction === emoji ? "font-bold text-sky-400" : ""
                 }`}
               >
