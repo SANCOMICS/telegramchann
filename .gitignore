@@ -17,5 +17,4 @@ yarn-error.log*
 # OS files
 .DS_Store
 
-# Uploads (optional if too large)
-public/uploads/*
+
