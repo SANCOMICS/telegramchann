@@ -109,7 +109,7 @@ export default function Home() {
               ))
             )}
           </main>
-          <ScrollButtons container={listRef} />
+           <ScrollButtons container={listRef as React.RefObject<HTMLDivElement>} />
 
           {/* Bottom disabled input */}
           <div className="px-4 py-3 border-t border-[#1c2733] bg-[#17212b]">

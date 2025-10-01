@@ -1,4 +1,6 @@
 // src/components/AdminMessage.tsx
+import React from "react";
+
 export type Msg = {
   id: number;
   author: string;
@@ -30,7 +32,8 @@ function linkify(text: string) {
   const pattern =
     /(?:https?:\/\/[^\s]+|www\.[^\s]+|(?:[a-zA-Z0-9-]+\.)+[a-zA-Z]{2,}(?:\/\S*)?)/g;
 
-  const nodes: (string | JSX.Element)[] = [];
+  const nodes: (string | React.ReactNode)[] = [];
+
   let lastIndex = 0;
   let match: RegExpExecArray | null;
   let key = 0;

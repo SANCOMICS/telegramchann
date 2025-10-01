@@ -149,7 +149,8 @@ export default function Admin() {
               ))
             )}
           </main>
-          <ScrollButtons container={listRef} />
+         <ScrollButtons container={listRef as React.RefObject<HTMLDivElement>} />
+
 
           {/* Composer */}
           <div className="px-4 py-3 border-t border-neutral-800 bg-neutral-950 space-y-2">
