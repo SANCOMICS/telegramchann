@@ -2,9 +2,8 @@ import Head from "next/head";
 import { useEffect, useRef, useState } from "react";
 import ScrollButtons from "../components/ScrollButtons";
 import { FiSearch, FiMoreVertical } from "react-icons/fi";
-import AdminMessage from "../components/AdminMessage"; // ✅ admin bubble
-
-import { Msg } from "../components/ChannelMessage"; // ✅ import Msg type
+import AdminMessage from "../components/AdminMessage"; 
+import { Msg } from "../components/ChannelMessage"; 
 
 function formatDate(dateStr: string) {
   const d = new Date(dateStr);
@@ -18,6 +17,7 @@ function formatDate(dateStr: string) {
 export default function Admin() {
   const [messages, setMessages] = useState<Msg[]>([]);
   const [loading, setLoading] = useState(true);
+  const [sending, setSending] = useState(false); // ✅ NEW: track upload/sending
   const [author, setAuthor] = useState("Admin");
   const [content, setContent] = useState("");
   const [file, setFile] = useState<File | null>(null);
@@ -43,53 +43,61 @@ export default function Admin() {
   async function send() {
     if (!content.trim() && !file) return;
 
+    setSending(true); // ✅ show loader
     let mediaUrl: string | null = null;
     let type = "text";
 
-    if (file) {
-      const formData = new FormData();
-      formData.append("file", file);
+    try {
+      if (file) {
+        const formData = new FormData();
+        formData.append("file", file);
 
-      const uploadRes = await fetch("/api/upload", {
-        method: "POST",
-        body: formData,
-      });
+        const uploadRes = await fetch("/api/upload", {
+          method: "POST",
+          body: formData,
+        });
 
-      if (!uploadRes.ok) {
-        alert("File upload failed");
-        return;
+        if (!uploadRes.ok) {
+          alert("File upload failed");
+          setSending(false);
+          return;
+        }
+
+        const { url } = await uploadRes.json();
+        mediaUrl = url;
+        type = file.type.startsWith("video") ? "video" : "image";
       }
 
-      const { url } = await uploadRes.json();
-      mediaUrl = url;
-      type = file.type.startsWith("video") ? "video" : "image";
+      const createdAt =
+        date && time
+          ? new Date(`${date}T${time}`).toISOString()
+          : new Date().toISOString();
+
+      await fetch("/api/messages", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          content: content.trim() || null,
+          author,
+          createdAt,
+          views,
+          mediaUrl,
+          type,
+        }),
+      });
+
+      // ✅ Clear inputs
+      setContent("");
+      setFile(null);
+      setDate("");
+      setTime("");
+      setViews(0);
+
+      // ✅ Reload whole page to show latest
+      window.location.reload();
+    } finally {
+      setSending(false);
     }
-
-    const createdAt =
-      date && time
-        ? new Date(`${date}T${time}`).toISOString()
-        : new Date().toISOString();
-
-    await fetch("/api/messages", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        content: content.trim() || null,
-        author,
-        createdAt,
-        views,
-        mediaUrl,
-        type,
-      }),
-    });
-
-    // ✅ clear + reload
-    setContent("");
-    setFile(null);
-    setDate("");
-    setTime("");
-    setViews(0);
-    await load();
   }
 
   // Group messages by date
@@ -136,7 +144,6 @@ export default function Admin() {
             ) : (
               Object.entries(grouped).map(([date, msgs]) => (
                 <div key={date} className="space-y-4">
-                  {/* Date separator */}
                   <div className="flex justify-center">
                     <span className="bg-neutral-900 text-neutral-400 text-xs px-3 py-1 rounded-full">
                       {date}
@@ -149,11 +156,15 @@ export default function Admin() {
               ))
             )}
           </main>
-         <ScrollButtons container={listRef as React.RefObject<HTMLDivElement>} />
-
+          <ScrollButtons container={listRef as React.RefObject<HTMLDivElement>} />
 
           {/* Composer */}
           <div className="px-4 py-3 border-t border-neutral-800 bg-neutral-950 space-y-2">
+            {sending && (
+              <div className="text-center text-sm text-sky-400 animate-pulse">
+                ⏳ Uploading & sending…
+              </div>
+            )}
             <div className="flex gap-2">
               <input
                 type="file"
@@ -184,29 +195,29 @@ export default function Admin() {
               />
             </div>
             <div className="flex gap-2">
-                <textarea
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  placeholder="Write a message"
-                  rows={1}
-                  className="flex-1 rounded-lg bg-neutral-900 px-4 py-2 text-sm outline-none resize-none leading-snug"
-                  onKeyDown={(e) => {
-                    // Press Enter → new line (default)
-                    // Press Ctrl+Enter or Cmd+Enter → send message
-                    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
-                      e.preventDefault();
-                      send();
-                    }
-                  }}
-                />
-                <button
-                  onClick={send}
-                  className="bg-sky-600 hover:bg-sky-500 px-4 py-2 rounded-full text-sm"
-                >
-                  Send
-                </button>
-              </div>
-
+              <textarea
+                value={content}
+                onChange={(e) => setContent(e.target.value)}
+                placeholder="Write a message"
+                rows={1}
+                className="flex-1 rounded-lg bg-neutral-900 px-4 py-2 text-sm outline-none resize-none leading-snug"
+                onKeyDown={(e) => {
+                  if ((e.metaKey || e.ctrlKey) && e.key === "Enter") {
+                    e.preventDefault();
+                    send();
+                  }
+                }}
+              />
+              <button
+                onClick={send}
+                disabled={sending} // ✅ disable while uploading
+                className={`px-4 py-2 rounded-full text-sm ${
+                  sending ? "bg-gray-600 cursor-not-allowed" : "bg-sky-600 hover:bg-sky-500"
+                }`}
+              >
+                {sending ? "Sending…" : "Send"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

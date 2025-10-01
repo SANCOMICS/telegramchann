@@ -129,18 +129,19 @@ export default function ChannelMessage({ message }: { message: Msg }) {
       localStorage.setItem(reactKey, emoji);
     }
 
-    fetch("/api/messages", {
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        id: message.id,
-        reactMindBlown: next["🤯"] ?? 0,
-        reactFire: next["🔥"] ?? 0,
-        reactHundred: next["💯"] ?? 0,
-        reactDash: next["💨"] ?? 0,
-        reactHeart: next["❤️"] ?? 0,
-      }),
-    });
+      const updates: any = { id: message.id };
+
+      if (next["🤯"] !== undefined) updates.reactMindBlown = next["🤯"];
+      if (next["🔥"] !== undefined) updates.reactFire = next["🔥"];
+      if (next["💯"] !== undefined) updates.reactHundred = next["💯"];
+      if (next["💨"] !== undefined) updates.reactDash = next["💨"];
+      if (next["❤️"] !== undefined) updates.reactHeart = next["❤️"];
+
+      fetch("/api/messages", {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(updates),
+      });
 
     setLocalReactions(next);
     setShowReactions(false);

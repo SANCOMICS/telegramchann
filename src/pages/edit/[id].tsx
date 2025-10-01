@@ -56,13 +56,14 @@ export default function EditMessage() {
           }
         }
 
-        setReactions({
-          reactMindBlown: msg.reactMindBlown ?? 0,
-          reactFire: msg.reactFire ?? 0,
-          reactHundred: msg.reactHundred ?? 0,
-          reactDash: msg.reactDash ?? 0,
-          reactHeart: msg.reactHeart ?? 0,
+       setReactions({
+          reactMindBlown: msg.reactMindBlown ?? reactions.reactMindBlown,
+          reactFire: msg.reactFire ?? reactions.reactFire,
+          reactHundred: msg.reactHundred ?? reactions.reactHundred,
+          reactDash: msg.reactDash ?? reactions.reactDash,
+          reactHeart: msg.reactHeart ?? reactions.reactHeart,
         });
+
       });
   }, [id]);
 
