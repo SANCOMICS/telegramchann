@@ -1,31 +1,26 @@
-
 datasource db {
   provider  = "postgresql"
-  url       = env("postgresql://neondb_owner:npg_9VJsjUKfdg3r@ep-morning-morning-aba42159-pooler.eu-west-2.aws.neon.tech/neondb?sslmode=require")        // created by the Neon integration on Vercel
-  directUrl = env("postgresql://neondb_owner:npg_9VJsjUKfdg3r@ep-morning-morning-aba42159.eu-west-2.aws.neon.tech/neondb?sslmode=require")   // also created by the Neon integration
+  url       = env("POSTGRES_PRISMA_URL")   // Vercel Neon integration sets this
+  directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
 generator client {
   provider = "prisma-client-js"
 }
 
-
 model Message {
-  id            Int      @id @default(autoincrement())
-  author        String
-  content       String?
-  mediaUrl      String?
-  type          String   @default("text")
-  views         Int      @default(0)
-  createdAt     DateTime @default(now())
+  id             Int      @id @default(autoincrement())
+  author         String
+  content        String?
+  mediaUrl       String?
+  type           String   @default("text")
+  views          Int      @default(0)
+  createdAt      DateTime @default(now())
 
-  // Reaction counts
-  reactMindBlown Int @default(0)
-  reactFire      Int @default(0)
-  reactHundred   Int @default(0)
-  reactFlex      Int @default(0)
-  reactDash      Int @default(0)
-  reactHeart     Int @default(0)
+  reactMindBlown Int      @default(0)
+  reactFire      Int      @default(0)
+  reactHundred   Int      @default(0)
+  reactFlex      Int      @default(0)
+  reactDash      Int      @default(0)
+  reactHeart     Int      @default(0)
 }
-
-
