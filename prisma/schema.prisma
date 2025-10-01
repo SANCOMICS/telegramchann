@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Message {
+  id            Int      @id @default(autoincrement())
+  author        String
+  content       String?
+  mediaUrl      String?
+  type          String   @default("text")
+  views         Int      @default(0)
+  createdAt     DateTime @default(now())
+
+  // Reaction counts
+  reactMindBlown Int @default(0)
+  reactFire      Int @default(0)
+  reactHundred   Int @default(0)
+  reactFlex      Int @default(0)
+  reactDash      Int @default(0)
+  reactHeart     Int @default(0)
+}
+
+
