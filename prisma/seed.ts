@@ -1,23 +1,24 @@
-const { PrismaClient } = require("@prisma/client");
-const prisma = new PrismaClient();
+import { PrismaClient } from "@prisma/client";
+
+const seedClient = new PrismaClient(); // ✅ renamed so no conflict
 
 async function main() {
-  const count = await prisma.message.count();
+  const count = await seedClient.message.count();
   if (count === 0) {
-    await prisma.message.createMany({
+    await seedClient.message.createMany({
       data: [
         { content: "Welcome to the channel!", author: "Admin" },
-        { content: "Updates will appear here.", author: "System" }
-      ]
+        { content: "Updates will appear here.", author: "System" },
+      ],
     });
   }
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Seeding failed:", e);
     process.exit(1);
   })
   .finally(async () => {
-    await prisma.$disconnect();
+    await seedClient.$disconnect();
   });

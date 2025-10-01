@@ -8,23 +8,19 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       const { id } = req.query;
 
       if (id) {
-        // Fetch single message
         const msg = await prisma.message.findUnique({
           where: { id: Number(id) },
         });
 
-        if (!msg) {
-          return res.status(404).json({ error: "Message not found" });
-        }
-
+        if (!msg) return res.status(404).json({ error: "Message not found" });
         return res.json(msg);
       } else {
-        // Fetch all messages
         const msgs = await prisma.message.findMany({
           orderBy: { createdAt: "asc" },
         });
 
-        return res.json(msgs);
+        // 🔒 Ensure API always returns an array
+        return res.json(msgs || []);
       }
     }
 
@@ -118,7 +114,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     res.setHeader("Allow", ["GET", "POST", "PATCH", "DELETE"]);
     return res.status(405).end(`Method ${req.method} Not Allowed`);
   } catch (err: any) {
-    console.error(err);
-    return res.status(500).json({ error: err.message });
+    console.error("❌ API error:", err);
+    return res.status(500).json({ error: err.message || "Internal server error" });
   }
 }
