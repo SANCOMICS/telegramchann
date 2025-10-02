@@ -45,20 +45,23 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
           author,
           content,
           mediaUrl,
-          type,
-          views: views ?? 0,
+          type: type ?? "text",
+          views: views ?? 0, // keep this, since not all models have a default
           createdAt: createdAt ? new Date(createdAt) : new Date(),
-          reactMindBlown: reactMindBlown ?? 0,
-          reactFire: reactFire ?? 0,
-          reactHundred: reactHundred ?? 0,
-          reactFlex: reactFlex ?? 0,
-          reactDash: reactDash ?? 0,
-          reactHeart: reactHeart ?? 0,
+
+          // ✅ only set if provided, otherwise use schema defaults
+          ...(reactMindBlown !== undefined && { reactMindBlown }),
+          ...(reactFire !== undefined && { reactFire }),
+          ...(reactHundred !== undefined && { reactHundred }),
+          ...(reactFlex !== undefined && { reactFlex }),
+          ...(reactDash !== undefined && { reactDash }),
+          ...(reactHeart !== undefined && { reactHeart }),
         },
       });
 
       return res.json(msg);
     }
+
 
     if (req.method === "PATCH") {
       const {
@@ -79,26 +82,31 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
       if (!id) return res.status(400).json({ error: "Message ID required" });
 
+      const data: any = {};
+
+      if (author !== undefined) data.author = author;
+      if (content !== undefined) data.content = content;
+      if (mediaUrl !== undefined) data.mediaUrl = mediaUrl;
+      if (type !== undefined) data.type = type;
+      if (views !== undefined) data.views = views;
+      if (createdAt) data.createdAt = new Date(createdAt);
+
+      // ✅ only update reactions if explicitly sent
+      if (reactMindBlown !== undefined) data.reactMindBlown = reactMindBlown;
+      if (reactFire !== undefined) data.reactFire = reactFire;
+      if (reactHundred !== undefined) data.reactHundred = reactHundred;
+      if (reactFlex !== undefined) data.reactFlex = reactFlex;
+      if (reactDash !== undefined) data.reactDash = reactDash;
+      if (reactHeart !== undefined) data.reactHeart = reactHeart;
+
       const msg = await prisma.message.update({
         where: { id: Number(id) },
-        data: {
-          author,
-          content,
-          mediaUrl,
-          type,
-          views,
-          createdAt: createdAt ? new Date(createdAt) : undefined,
-          reactMindBlown: reactMindBlown ?? 0,
-          reactFire: reactFire ?? 0,
-          reactHundred: reactHundred ?? 0,
-          reactFlex: reactFlex ?? 0,
-          reactDash: reactDash ?? 0,
-          reactHeart: reactHeart ?? 0,
-        },
+        data,
       });
 
       return res.json(msg);
     }
+
 
     if (req.method === "DELETE") {
       const id = req.query.id || req.body.id;
