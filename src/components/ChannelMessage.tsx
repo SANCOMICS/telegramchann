@@ -204,7 +204,7 @@ export default function ChannelMessage({ message }: { message: Msg }) {
        {/* Meta - rotated time bottom right */}
       <div className="flex justify-between items-end mt-1 relative">
        
-        {/* Time (rotated bottom-right) */}
+        {/* Time (rotated bottom-right) */}<br/>
         <span
           className="absolute bottom-1 right-1 text-[10px] text-neutral-400 transform  origin-bottom-right"
         ><a className="pr-2">👁 {localViews} </a> 
