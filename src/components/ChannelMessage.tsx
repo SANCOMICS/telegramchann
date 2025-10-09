@@ -183,22 +183,29 @@ export default function ChannelMessage({ message }: { message: Msg }) {
 
 
       {/* Reactions */}
+      {/* Reactions (tap-to-toggle) */}
       {Object.entries(localReactions).some(([, c]) => c > 0) && (
-        <div className="flex  gap-2 ml-1 mr-2 text-lg mt-1">
+        <div className="flex flex-wrap gap-2 ml-1 mr-2 text-lg mt-1">
           {Object.entries(localReactions)
             .filter(([, c]) => c > 0)
             .map(([emoji, count]) => (
-              <span
+              <button
                 key={emoji}
-                className={`flex bg-[#2b5278] rounded-xl p-[3px] items-center gap-1 ${
-                  myReaction === emoji ? "font-bold text-sky-400" : ""
-                }`}
+                onClick={() => handleReact(emoji)} // ✅ tapping toggles user’s reaction
+                className={`flex items-center gap-1 rounded-xl px-2 py-[3px] 
+                  transition-all duration-150 
+                  ${myReaction === emoji
+                    ? "bg-sky-700 text-sky-300 font-bold scale-105"
+                    : "bg-[#2b5278] hover:bg-[#3a6a9c]"}`
+                }
               >
-                {emoji} <span className="text-xs">{count}</span>
-              </span>
+                <span>{emoji}</span>
+                <span className="text-xs">{count}</span>
+              </button>
             ))}
         </div>
       )}
+
       
       
        {/* Meta - rotated time bottom right */}
